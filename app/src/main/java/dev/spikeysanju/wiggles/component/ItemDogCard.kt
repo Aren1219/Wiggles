@@ -15,17 +15,10 @@
  */
 package dev.spikeysanju.wiggles.component
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -41,9 +34,24 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.spikeysanju.wiggles.R
+import dev.spikeysanju.wiggles.data.FakeDogDatabase
 import dev.spikeysanju.wiggles.model.Dog
+import dev.spikeysanju.wiggles.ui.theme.MyTheme
+
+@Composable
+@Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
+private fun PreviewDogCard() {
+    MyTheme {
+        ItemDogCard(
+            dog = FakeDogDatabase.dogList[0],
+            onItemClicked = {}
+        )
+    }
+}
 
 @Composable
 fun ItemDogCard(dog: Dog, onItemClicked: (dog: Dog) -> Unit) {

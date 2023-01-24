@@ -23,23 +23,28 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import dev.spikeysanju.wiggles.ui.theme.MyTheme
 import dev.spikeysanju.wiggles.view.WigglesMain
 @ExperimentalAnimationApi
 class MainActivity : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val currentTheme = isSystemInDarkTheme()
-            val toggleTheme: () -> Unit = {
-                if (currentTheme) setDayTheme() else setDarkTheme()
+//            val toggleTheme: () -> Unit = {
+//                if (currentTheme) setDayTheme() else setDarkTheme()
+//            }
+            var shouldDark by remember {
+                mutableStateOf(currentTheme)
             }
-            MyTheme {
+            MyTheme(shouldDark) {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    WigglesMain(toggleTheme)
+                    WigglesMain { shouldDark = !shouldDark }
                 }
             }
         }
