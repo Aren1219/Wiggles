@@ -45,7 +45,7 @@ fun InfoCard(title: String, value: String) {
         modifier = Modifier
             .size(90.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(color = colorResource(id = R.color.card))
+            .background(color = MaterialTheme.colors.onSurface)
             .padding(12.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -56,7 +56,7 @@ fun InfoCard(title: String, value: String) {
             Text(
                 text = value,
                 modifier = Modifier.fillMaxWidth(),
-                color = colorResource(id = R.color.text),
+                color = MaterialTheme.colors.surface,
                 style = MaterialTheme.typography.subtitle1,
                 fontWeight = FontWeight.W600,
                 textAlign = TextAlign.Center

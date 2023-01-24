@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -70,7 +71,7 @@ fun OwnerCard(name: String, bio: String, image: Int) {
         Column(modifier = Modifier) {
             Text(
                 text = name,
-                color = colorResource(id = R.color.text),
+                color = MaterialTheme.colors.surface,
                 style = typography.subtitle1,
                 fontWeight = FontWeight.W600,
                 textAlign = TextAlign.Start
@@ -79,7 +80,7 @@ fun OwnerCard(name: String, bio: String, image: Int) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = bio,
-                color = colorResource(id = R.color.text),
+                color = MaterialTheme.colors.surface,
                 style = typography.caption
             )
         }

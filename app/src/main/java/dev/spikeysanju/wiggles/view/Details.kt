@@ -15,6 +15,7 @@
  */
 package dev.spikeysanju.wiggles.view
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -46,6 +47,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import dev.spikeysanju.wiggles.R
@@ -62,7 +64,7 @@ fun Details(navController: NavController, id: Int) {
             TopAppBar(
                 title = { Text("Details") },
                 backgroundColor = MaterialTheme.colors.background,
-                contentColor = colorResource(id = R.color.text),
+                contentColor = MaterialTheme.colors.surface,
                 navigationIcon = {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
@@ -72,7 +74,7 @@ fun Details(navController: NavController, id: Int) {
                             .clickable {
                                 navController.navigateUp()
                             },
-                        tint = colorResource(id = R.color.text)
+                        tint = MaterialTheme.colors.surface
                     )
                 }
             )
@@ -84,12 +86,19 @@ fun Details(navController: NavController, id: Int) {
     )
 }
 
+@Preview(showSystemUi = true, uiMode = UI_MODE_NIGHT_YES)
+@Preview(showSystemUi = true)
+@Composable
+fun PreviewDetails() {
+    DetailsView(id = 0)
+}
+
 @Composable
 fun DetailsView(id: Int) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = colorResource(id = R.color.background))
+            .background(color = MaterialTheme.colors.background)
     ) {
 
         val dog = FakeDogDatabase.dogList[id]
@@ -126,7 +135,7 @@ fun DetailsView(id: Int) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp, 0.dp, 16.dp, 0.dp),
-                    color = colorResource(id = R.color.text),
+                    color = MaterialTheme.colors.surface,
                     style = MaterialTheme.typography.body2,
                     textAlign = TextAlign.Start
                 )
@@ -194,7 +203,7 @@ fun Title(title: String) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp, 0.dp, 0.dp, 0.dp),
-        color = colorResource(id = R.color.text),
+        color = MaterialTheme.colors.surface,
         style = MaterialTheme.typography.subtitle1,
         fontWeight = FontWeight.W600,
         textAlign = TextAlign.Start

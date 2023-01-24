@@ -39,9 +39,7 @@ import dev.spikeysanju.wiggles.ui.theme.MyTheme
 @Composable
 private fun PreviewHome(){
     MyTheme() {
-        Home(navController = rememberAnimatedNavController(), dogList = FakeDogDatabase.dogList) {
-
-        }
+        Home(navController = rememberAnimatedNavController(), dogList = FakeDogDatabase.dogList) {}
     }
 }
 
