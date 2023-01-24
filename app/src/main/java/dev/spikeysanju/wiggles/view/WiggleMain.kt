@@ -79,5 +79,28 @@ fun WigglesMain(toggleTheme: () -> Unit) {
         ) {
             Details(navController, it.arguments?.getInt("id") ?: 0)
         }
+        composable(
+            Screen.Adopt.route,
+            enterTransition = { _, _ ->
+                slideInHorizontally(
+                    initialOffsetX = { 300 },
+                    animationSpec = tween(
+                        durationMillis = 300,
+                        easing = FastOutSlowInEasing
+                    )
+                ) + fadeIn(animationSpec = tween(300))
+            },
+            exitTransition = { _, _ ->
+                slideOutHorizontally(
+                    targetOffsetX = { 300 },
+                    animationSpec = tween(
+                        durationMillis = 300,
+                        easing = FastOutSlowInEasing
+                    )
+                ) + fadeOut(animationSpec = tween(300))
+            }
+        ) {
+            Adopt(navController = navController)
+        }
     }
 }
