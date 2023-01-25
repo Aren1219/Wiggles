@@ -27,7 +27,7 @@ private val DarkColorPalette = darkColors(
     secondary = Teal200,
     background = blueBGNight,
     surface = pinkText,
-    onSurface = cardNight
+    onSurface = cardNight,
 )
 
 private val LightColorPalette = lightColors(

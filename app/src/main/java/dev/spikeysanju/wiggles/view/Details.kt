@@ -42,6 +42,7 @@ import dev.spikeysanju.wiggles.component.DogInfoCard
 import dev.spikeysanju.wiggles.component.InfoCard
 import dev.spikeysanju.wiggles.component.OwnerCard
 import dev.spikeysanju.wiggles.data.FakeDogDatabase
+import dev.spikeysanju.wiggles.navigation.Screen
 
 @Composable
 fun Details(navController: NavController, id: Int) {
@@ -68,7 +69,9 @@ fun Details(navController: NavController, id: Int) {
         },
 
         content = {
-            DetailsView(id)
+            DetailsView(id) {
+                navController.navigate(Screen.Adopt.route)
+            }
         }
     )
 }
@@ -77,11 +80,11 @@ fun Details(navController: NavController, id: Int) {
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewDetails() {
-    DetailsView(id = 0)
+    DetailsView(id = 0) {}
 }
 
 @Composable
-fun DetailsView(id: Int) {
+fun DetailsView(id: Int, onButtonClick: () -> Unit) {
 
     LazyColumn(
         modifier = Modifier
@@ -167,7 +170,7 @@ fun DetailsView(id: Int) {
         item {
             Spacer(modifier = Modifier.height(36.dp))
             Button(
-                onClick = {},
+                onClick = { onButtonClick() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp)
