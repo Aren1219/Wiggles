@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dev.spikeysanju.wiggles.ui.theme.MyTheme
+import java.util.regex.Pattern
 
 @OptIn(ExperimentalAnimationApi::class)
 @Preview
@@ -77,6 +78,12 @@ fun Signup() {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    var firstNameErrMsg by remember { mutableStateOf("") }
+    var surnameErrMsg by remember { mutableStateOf("") }
+    var emailErrMsg by remember { mutableStateOf("") }
+    var phoneErrMsg by remember { mutableStateOf("") }
+    var passwordErrMsg by remember { mutableStateOf("") }
+
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
         modifier = Modifier
@@ -89,7 +96,8 @@ fun Signup() {
                 value = firstName,
                 onValueChange = { firstName = it },
                 label = "first name",
-                focusManager = focusManager
+                focusManager = focusManager,
+                errorMessage = firstNameErrMsg
             )
 
         }
@@ -98,7 +106,8 @@ fun Signup() {
                 value = surname,
                 onValueChange = { surname = it },
                 label = "surname",
-                focusManager = focusManager
+                focusManager = focusManager,
+                errorMessage = surnameErrMsg
             )
         }
         item {
@@ -110,7 +119,8 @@ fun Signup() {
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
-                )
+                ),
+                errorMessage = phoneErrMsg
             )
         }
         item {
@@ -130,7 +140,8 @@ fun Signup() {
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
-                )
+                ),
+                errorMessage = emailErrMsg
             )
         }
         item {
@@ -143,15 +154,25 @@ fun Signup() {
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Done
                 ),
-                visualTransformation = PasswordVisualTransformation()
+                visualTransformation = PasswordVisualTransformation(),
+                errorMessage = passwordErrMsg
             )
         }
         item {}
         item {
-            Button(onClick = { /*TODO*/ },
+            Button(
+                onClick = {
+                    focusManager.clearFocus()
+                    firstNameErrMsg = validateName(firstName)
+                    surnameErrMsg = validateName(surname)
+                    phoneErrMsg = validatePhone(phoneNumber)
+                    emailErrMsg = validateEmail(email)
+                    passwordErrMsg = validatePassword(password)
+                },
                 Modifier
                     .fillMaxSize()
-                    .padding(12.dp)) {
+                    .padding(12.dp)
+            ) {
                 Text(
                     text = "Submit",
                     modifier = Modifier.fillMaxSize(),
@@ -160,6 +181,29 @@ fun Signup() {
             }
         }
     }
+}
+
+fun validateName(name: String): String {
+    return if (!Pattern.compile("\\p{Alpha}+").matcher(name).matches()) "invalid name"
+    else ""
+}
+
+fun validateEmail(password: String): String {
+    return if (!android.util.Patterns.EMAIL_ADDRESS.matcher(password).matches()) "invalid email"
+    else ""
+}
+
+fun validatePhone(number: String): String {
+    return if (!android.util.Patterns.PHONE.matcher(number).matches()) "invalid phone number"
+    else ""
+}
+
+fun validatePassword(password: String): String {
+    return if (password.length < 6) "at least 6 characters"
+    else if (!password.contains(Regex("[0-9]"))) "must include number"
+    else if (!password.contains(Regex("[A-Z]"))) "must include uppercase"
+    else if (!password.contains(Regex("[a-z]"))) "must include lowercase"
+    else ""
 }
 
 @Composable
@@ -179,23 +223,28 @@ fun AdoptTextField(
         },
         onDone = { focusManager.clearFocus() }
     ),
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    errorMessage: String = ""
 ) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = { onValueChange(it) },
-        colors = TextFieldDefaults.textFieldColors(
-            textColor = MaterialTheme.colors.surface,
-            cursorColor = MaterialTheme.colors.surface,
-            focusedIndicatorColor = MaterialTheme.colors.surface,
-            unfocusedIndicatorColor = MaterialTheme.colors.primary,
-            unfocusedLabelColor = Color.Gray,
-            focusedLabelColor = MaterialTheme.colors.surface
-        ),
-        label = { Text(text = label) },
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        modifier = modifier.padding(horizontal = 4.dp),
-        visualTransformation = visualTransformation
-    )
+    Column(modifier = modifier.padding(horizontal = 4.dp)) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = { onValueChange(it) },
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = MaterialTheme.colors.surface,
+                cursorColor = MaterialTheme.colors.surface,
+                focusedIndicatorColor = MaterialTheme.colors.surface,
+                unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedLabelColor = Color.Gray,
+                focusedLabelColor = MaterialTheme.colors.surface
+            ),
+            label = { Text(text = label) },
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+//            modifier = modifier.padding(horizontal = 4.dp),
+            visualTransformation = visualTransformation,
+            isError = errorMessage.isNotEmpty()
+        )
+        Text(text = errorMessage, color = MaterialTheme.colors.error)
+    }
 }
