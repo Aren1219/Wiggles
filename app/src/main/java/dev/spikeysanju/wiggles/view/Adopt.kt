@@ -1,5 +1,6 @@
 package dev.spikeysanju.wiggles.view
 
+import android.util.Patterns
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -80,8 +81,9 @@ fun Signup() {
 
     var firstNameErrMsg by remember { mutableStateOf("") }
     var surnameErrMsg by remember { mutableStateOf("") }
-    var emailErrMsg by remember { mutableStateOf("") }
     var phoneErrMsg by remember { mutableStateOf("") }
+    var addressErrMsg by remember { mutableStateOf("") }
+    var emailErrMsg by remember { mutableStateOf("") }
     var passwordErrMsg by remember { mutableStateOf("") }
 
     LazyVerticalGrid(
@@ -99,7 +101,6 @@ fun Signup() {
                 focusManager = focusManager,
                 errorMessage = firstNameErrMsg
             )
-
         }
         item {
             AdoptTextField(
@@ -128,7 +129,8 @@ fun Signup() {
                 value = address,
                 onValueChange = { address = it },
                 label = "address",
-                focusManager = focusManager
+                focusManager = focusManager,
+                errorMessage = addressErrMsg
             )
         }
         item {
@@ -168,6 +170,7 @@ fun Signup() {
                     phoneErrMsg = validatePhone(phoneNumber)
                     emailErrMsg = validateEmail(email)
                     passwordErrMsg = validatePassword(password)
+                    addressErrMsg = validateAddress(address)
                 },
                 Modifier
                     .fillMaxSize()
@@ -184,17 +187,23 @@ fun Signup() {
 }
 
 fun validateName(name: String): String {
-    return if (!Pattern.compile("\\p{Alpha}+").matcher(name).matches()) "invalid name"
-    else ""
-}
-
-fun validateEmail(password: String): String {
-    return if (!android.util.Patterns.EMAIL_ADDRESS.matcher(password).matches()) "invalid email"
+    return if (name.isEmpty()) "name can't be blank"
+    else if (!Pattern.compile("\\p{Alpha}+").matcher(name).matches()) "invalid name"
     else ""
 }
 
 fun validatePhone(number: String): String {
-    return if (!android.util.Patterns.PHONE.matcher(number).matches()) "invalid phone number"
+    return if (number.isEmpty()) "phone number can't be blank"
+    else if (!Patterns.PHONE.matcher(number).matches()) "invalid phone number"
+    else ""
+}
+
+fun validateAddress(address: String): String =
+    if (address.isEmpty()) "address can't be blank" else ""
+
+fun validateEmail(email: String): String {
+    return if (email.isEmpty()) "email can't be blank"
+    else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) "invalid email"
     else ""
 }
 
@@ -241,7 +250,6 @@ fun AdoptTextField(
             label = { Text(text = label) },
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
-//            modifier = modifier.padding(horizontal = 4.dp),
             visualTransformation = visualTransformation,
             isError = errorMessage.isNotEmpty()
         )
